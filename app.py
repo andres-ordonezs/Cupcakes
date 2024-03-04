@@ -56,6 +56,7 @@ def add_a_cupcake():
 @app.patch("/api/cupcakes/<int:cupcake_id>")
 def update_cupcake(cupcake_id):
     """ Updates cupcake and returns
+    What data can you send?
     a JSON {cupcake: {id, flavor, size, rating, image_url}}   """
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
@@ -64,12 +65,15 @@ def update_cupcake(cupcake_id):
 
     if 'flavor' in data:
         cupcake.flavor = data['flavor']
+    # cupcake.flavor = data.get('flavor') or cupcake.flavor
     if 'size' in data:
         cupcake.size = data['size']
     if 'rating' in data:
         cupcake.rating = data['rating']
     if 'image_url' in data:
-        cupcake.image_url = data['image_url']
+
+        #import default image url and use that in or statement
+        cupcake.image_url = data['image_url'] or cupcake.image_url
 
     db.session.add(cupcake)
     db.session.commit()
@@ -88,4 +92,4 @@ def delete_cupcake(cupcake_id):
     db.session.delete(cupcake)
     db.session.commit()
 
-    return (jsonify(f"deleted: {cupcake_id}"))
+    return (jsonify(deleted = cupcake_id))
