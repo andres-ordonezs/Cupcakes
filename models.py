@@ -19,12 +19,13 @@ class Cupcake(db.Model):
 
     flavor = db.Column(
         db.String(50),
-        nullable=False
+        nullable=False,
+
     )
 
     size = db.Column(
         db.String(15),
-        nullable=False
+        nullable=False,
     )
 
     rating = db.Column(
