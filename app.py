@@ -1,7 +1,7 @@
 """Flask app for Cupcakes"""
 import os
-from flask import Flask, request, jsonify
-from models import db, connect_db, Cupcake
+from flask import Flask, request, jsonify, render_template
+from models import db, connect_db, Cupcake, DEFAULT_URL
 
 app = Flask(__name__)
 
@@ -10,6 +10,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
+
+
+@app.get("/")
+def homepage():
+    """ Renders template to index.html """
+
+    return render_template("index.html")
 
 
 @app.get("/api/cupcakes")
@@ -63,17 +70,10 @@ def update_cupcake(cupcake_id):
 
     data = request.json
 
-    if 'flavor' in data:
-        cupcake.flavor = data['flavor']
-    # cupcake.flavor = data.get('flavor') or cupcake.flavor
-    if 'size' in data:
-        cupcake.size = data['size']
-    if 'rating' in data:
-        cupcake.rating = data['rating']
-    if 'image_url' in data:
-
-        #import default image url and use that in or statement
-        cupcake.image_url = data['image_url'] or cupcake.image_url
+    cupcake.flavor = data.get('flavor') or cupcake.flavor
+    cupcake.size = data.get('size') or cupcake.size
+    cupcake.rating = data.get('rating') or cupcake.rating
+    cupcake.image_url = data['image_url'] or DEFAULT_URL
 
     db.session.add(cupcake)
     db.session.commit()
@@ -92,4 +92,4 @@ def delete_cupcake(cupcake_id):
     db.session.delete(cupcake)
     db.session.commit()
 
-    return (jsonify(deleted = cupcake_id))
+    return (jsonify(deleted=cupcake_id))
