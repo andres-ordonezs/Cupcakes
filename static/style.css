@@ -9,3 +9,8 @@ input {
 #selectRow {
   margin: 10px 0;
 }
+
+img {
+  width: 250px;
+  object-fit: cover;
+}

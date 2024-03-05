@@ -21,7 +21,7 @@ def homepage():
 
 @app.get("/api/cupcakes")
 def list_all_cupcakes():
-    """Return JSON {'desserts': [{id, name, calories}, ...]}"""
+    """Return JSON {'cupcake': [{flavor, size, rating, image_url}]}"""
 
     cupcakes = Cupcake.query.all()
     serialized = [c.serialize() for c in cupcakes]
@@ -31,7 +31,7 @@ def list_all_cupcakes():
 
 @app.get("/api/cupcakes/<int:cupcake_id>")
 def list_cupcake(cupcake_id):
-    """Return JSON {'dessert': [{id, name, calories}]}"""
+    """Return JSON {'cupcake': [{flavor, size, rating, image_url}]}"""
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
     serialized = cupcake.serialize()
@@ -41,7 +41,7 @@ def list_cupcake(cupcake_id):
 
 @app.post("/api/cupcakes")
 def add_a_cupcake():
-    """Return JSON {'dessert': [{id, name, calories}]}"""
+    """Return JSON {'cupcake': [{flavor, size, rating, image_url}]}"""
     flavor = request.json["flavor"]
     size = request.json["size"]
     rating = request.json["rating"]
@@ -50,7 +50,7 @@ def add_a_cupcake():
     cupcake = Cupcake(flavor=flavor,
                       size=size,
                       rating=rating,
-                      image_url=image_url)
+                      image_url=image_url or None)
 
     db.session.add(cupcake)
     db.session.commit()
